@@ -1,0 +1,188 @@
+<!--导入静态文件服务模块　// -->
+{% load static %}
+<!--导入自定义模板标签//-->
+{% load custom_tags %}
+<html>
+<head>
+    <title>blog样例 </title>
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--　导入Bootstrap框架样式-->
+    <link href="{% static 'blog/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!--　自定义的样式-->
+    <link rel="stylesheet" href="{% static 'blog/css/blogstyle.css' %}">
+    <!--　导入相关的Java Script脚本文件 -->
+    <script src="{% static 'blog/js/jquery-2.1.3.min.js' %}"></script>
+    <script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+    <style>
+        span.highlighted {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!--　应用Bootstrap框架的导航条组件-->
+<!--　导航条组件开始-->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'blog:index' %}" style="color:red;font-weight:700;">&nbsp;&nbsp;&nbsp;&nbsp;Blog系统简例&nbsp;&nbsp;&nbsp;&nbsp; </a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-left" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <!-- {% if tabname == "firsttab" %}
+                    … {% endif %}这个判断语句中，tabname是视图函数传入的变量，相关视图函数请查看本章后面的有关介绍，主要标识用户单击了“首页”“我的”中的哪一个链接 //-->
+                <li {% if tabname == "firsttab" %} class='active' {% endif %}>
+                    <a href="{% url 'blog:index' %}" style="color:red;">首页</a></li>
+                <!-- 以下是模板标签的判断标签，判断用户是否已登录，以决定“我的”链接是否显示，注意不能用{% if request.user %}判断用户登录，因为无用户登录时，request.user 的值为Anonymous User，但request.user.username无值（None），只有用户登录了，request.user.username才有值 -->
+                <!-- 判断语句if的开始-->
+                {% if request.user.username %}
+                    <li {% if tabname == "mytab" %} class='active' {% endif %}>
+                        <a href="{% url 'blog:myindex' request.user.id %}" data-hover="我的">我的</a></li>
+                {% endif %}
+                <!-- 判断语句if的结束-->
+                <!-- 通过一个<form>表单设置一个搜索字段，请注意设置请求方式是get-->
+                <form class="navbar-form navbar-left" method="get" action="{% url 'haystack_search' %}">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="q" placeholder="搜索" required>
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <!-- form结束-->
+        </div> <!-- /.navbar-collapse -->
+        <ul class="nav navbar-nav navbar-right">
+            <!--　判断用户是否已登录，以决定显示“个人中心”还是显示“登录”和“注册”-->
+            {% if request.user.username %}
+                <li><a href="#">{{ request.user.nikename }}</a></li>
+                <!--　 应用Bootstrap下拉列表框插件 -->
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false"> 个人中心<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'blog:myindex' request.user.id %}">我的文章</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'blog:logout' %}">注销</a></li>
+                    </ul>
+                </li>
+                <!--　 Bootstrap下拉列表框插件结尾 -->
+            {% else %}
+                <li><a href="{% url 'blog:login' %}">登录</a></li>
+                <li><a href="{% url 'blog:registe' %}">注册</a></li>
+            {% endif %}
+            <!--　判断用户是否已登录代码块结尾-->
+        </ul>
+    </div><!-- /.container-fluid -->
+</nav>
+<!--　导航条组件结束-->
+<div class="content-body" style="both:clear;margin-top:60px;">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-8">
+                <!--　模板文件的块，继承母版的页面代码块-->
+                {% block main %}
+                {% endblock main %}
+            </main>
+            <aside class="col-md-4">
+                <!-- 模板文件的块toc，这个toc块中有代码，那么继承于母版的页面如果在此块中写代码，就替换母版的内容，如果不写代码，默认应用母版的内容-->
+                {% block toc %}
+                    <!-- 母版页面右边部分有4部分，分别是“最新文章”“分类”“标签”“归档”4个栏目，每个栏目都应用Bootstrap面板组件-->
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">最新文章</div>
+                        <div class="panel-body">
+                            <!-- 调用自定义标签文件custom_tags中定义的get_new_blogs()函数，返回最新发表的文章-->
+                            <!-- 模板标签get_new_blogs在模板文件中的工作方式：输入{% get_new_blogs as new_blog_list %}，模板就得到一个最新文章列表，并通过 as 语句保存到 new_blog_list 模板变量里，后面的语句就可以循环从new_blog_list获取每篇文章-->
+                            {% get_new_blogs as new_blog_list %}
+                            <ul>
+                                <!-- 通过{% for %}{% endfor%}模板标签循环new_blog_list变量，取得最新文章列表-->
+                                {% for blog in new_blog_list %}
+                                    <li>
+                                        <!-- Blog数据模型的实例对象blog调用Blog数据模型中定义的方法get_absolute_url()，该方法返回URL-->
+                                        <a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a>
+                                    </li>
+                                {% empty %}
+                                    暂无文章！
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel panel-success">
+                        <div class="panel-heading">分类</div>
+                        <div class="panel-body">
+                            <!-- 调用自定义标签文件custom_tags中定义的get_categories()函数，显示每个类中的文章篇数-->
+                            {% get_categories as category_list %}
+                            <ul>
+                                {% for category in category_list %}
+                                    <li>
+                                        <!-- {% url 'blog:category' category.pk %}按照urls.py文件的配置项名反解析出URL路径-->
+                                        <a href="{% url 'blog:category' category.pk %}">{{ category.name }}
+                                            <!-- 显示每个类中的文章篇数-->
+                                            <span class="post-count">({{ category.num_blogs }})</span></a>
+                                    </li>
+                                {% empty %}
+                                    暂无分类！
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading">标签</div>
+                        <div class="panel-body">
+                            <div class="tag-list">
+                                <!--调用自定义标签文件custom_tags中定义的get_tags()函数，显示每个标签的名字和文件数量-->
+                                {% get_tags as tag_list %}
+                                <ul>
+                                    {% for tag in tag_list %}
+                                        <!-- 显示每个标签的名字和文件数量-->
+                                        <li>
+                                            <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}({{ tag.num_blogs }})</a>
+                                        </li>
+                                    {% empty %}
+                                        暂无标签！
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">归档</div>
+                        <div class="panel-body">
+                            <!-- 调用自定义标签文件custom_tags中定义的archives()函数，倒序显示有文章发表的年、月-->
+                            {% archives as date_list %}
+                            <ul>
+                                {% for date in date_list %}
+                                    <li>
+                                        <a href="{% url 'blog:archives' date.year date.month %}">
+                                            {{ date.year }}年{{ date.month }}月</a>
+                                    </li>
+                                {% empty %}
+                                    暂无归档！
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endblock toc %}
+            </aside>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div align="center">
+                <h5>&copy 2017 - good good study day day up - 坚持每天进步一点</h5>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
