@@ -1,0 +1,122 @@
+<!--加载静态文件 //-->
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页面</title>
+    <!--用Bootstrap框架样式 //-->
+    <link href="{% static 'blog/css/bootstrap.min.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <!--应用Bootstrap页头组件 //-->
+            <!--页头组件开始 //-->
+            <div class="page-header">
+                <h2>用户注册
+                    <small>&nbsp;Blog注册页面</small>
+                </h2>
+            </div>
+            <!--页头组件结束 //-->
+            <!--<form>标签设置novalidate，让前端页面表单不对输入的字段值进行验证。设置enctype="multipart/form-data"，表单才能支持图片、文件上传。class="form-horizontal"将表单设置为form-horizontal样式类，可以将字段名（<label>标签）和字段输入框水平并排布局。 //-->
+            <form novalidate action="/registe/" method="post" class="form-horizontal" enctype="multipart/form-data">
+                <!--Django为了防止CSRF，引入csrf_token变量随机生成token//-->
+                {% csrf_token %}
+                <div class="form-group">
+                    <!-- {{ formobj.username.id_for_label }}生成一个字符串与 {{ formobj.username }}生成标签id值是一样，<label>标签的for属性作用是单击这个<label>，id值与for值相同的输入框（如<input>标签）将获得焦点 //-->
+                    <label for="{{ formobj.username.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.username .label }}</label>
+                    <div class="col-sm-8">
+                        <!-- {{ formobj.username }}将生成<input type="text" name="username" class="form-control" maxlength="20"…>标签，该标签的许多属性是在 class reg_form(forms.Form)类中对字段进行设定的，如name、type、class等属性//-->
+                        {{ formobj.username }}
+                        <!-- 如果输入值校验不通过，{{ formobj.username.errors.0 }}变量返回 username字段的第一个错误信息//-->
+                        <span class="help-block">{{ formobj.username.errors. 0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ formobj.password.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.password. label }}</label>
+                    <div class="col-sm-8">
+                        {{ formobj.password }}
+                        <span class="help-block">{{ formobj.password.errors. 0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ formobj.repassword.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.repassword.label }}</label>
+                    <div class="col-sm-8">
+                        {{ formobj.repassword }}
+                        <span class="help-block">{{ formobj.repassword. errors.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ formobj.nikename.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.nikename.label }}</label>
+                    <div class="col-sm-8">
+                        {{ formobj.nikename }}
+                        <span class="help-block">{{ formobj.nikename. errors.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ formobj.email.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.email.label }}</label>
+                    <div class="col-sm-8">
+                        {{ formobj.email }}
+                        <span class="help-block">{{ formobj.email.errors.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="{{ formobj.telephone.id_for_label }}"
+                           class="col-sm-2 control-label">{{ formobj.telephone.label }}</label>
+                    <div class="col-sm-8">
+                        {{ formobj.telephone }}
+                        <span class="help-block">{{ formobj.telephone. errors.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">{{ formobj.head_img.label }}</label>
+                    <div class="col-sm-8">
+                        <!--在<label>标签中间加一个<img>标签，<label>标签的位置会显示一张图片，<label>标签for属性值是{{formobj.head_img.id_for_label}}产生的标签<input type="file"…>的id值，该标签设置成了不可见，产生的效果就是单击图片弹出“打开”窗口 //-->
+                        <label for="{{ formobj.head_img.id_for_label }}" class="col-sm-2 control-label">
+                            <!--<image>标签的src属性先指向一个默认图片地址 //-->
+                            <img id="head-img" src="/static/blog/image/headimg.jpg"
+                                 style="height:100px;width:100px;">
+                        </label>
+                        {{ formobj.head_img }}
+                        <span class="help-block"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <input type="submit" class="btn btn-success" value="用户注册"></input>
+                        <a href="/" class="btn btn-success">返回首页</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap框架用到j Query，因此先引用j Query脚本文件 //-->
+<script src="{% static 'blog/js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'blog/js/bootstrap.min.js' %}"></script>
+<script>
+    // 由于上传后的文件在提交之前并没有src指向它，所以在提交之前是不可见的
+    // 以下的脚本代码通过一个文件读写对象把图片读到页面内存中
+    // 并以URL形式放在对象的result属性中
+    // 然后设置图片src指向这个result属性值
+    // 找到头像的<input>标签并绑定change事件
+    $("#id_head_img").change(function () {
+// 创建一个读取文件的对象
+        var filerd = new FileReader();
+// 读取你选中的那个文件
+        filerd.readAsDataURL(this.files[0]);
+// filerd.onload设置文件读取完成后的后续动作
+        filerd.onload = function () {
+// 把图片加载到<img>标签的src属性上
+            $("#head-img").attr("src", filerd.result);
+        };
+    });
+</script>
+</body>
+</html>

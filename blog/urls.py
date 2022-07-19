@@ -7,8 +7,15 @@
 
 from django.urls import path, re_path
 from .views import *
+
 app_name = 'blog'
 urlpatterns = [
     # 加入一个URL配置项
     path('test_ckeditor_front/', test_ckeditor_front),
+    # 加入登录URL与视图函数的关系
+    path('login/', login, name='login'),
+    # 用户注册的URL配置项
+    path('registe/', registe, name='registe'),
+    # 注销的URL配置项
+    # path('logout/', logout, name='logout'),
 ]
