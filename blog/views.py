@@ -10,7 +10,7 @@ def test_ckeditor_front(request):
     # 也就是说loguser中的成员是系统用户，为了测试取出第一条记录
     user_obj = models.loguser.objects.all().first()
     # 通过认证模块让用户处于登录态
-    auth.login(request, user_obj)
+    # auth.login(request, user_obj)
     # 取出第一条测试数据
     blog = models.Blog.objects.get(id=1)
     # 把数据传递给页面
