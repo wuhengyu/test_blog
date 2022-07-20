@@ -17,5 +17,6 @@ urlpatterns = [
     # 用户注册的URL配置项
     path('registe/', registe, name='registe'),
     # 注销的URL配置项
-    # path('logout/', logout, name='logout'),
+    path('logout/', logout, name='logout'),
+    path('indexview/', indexview.as_view(), name='indexview'),
 ]

@@ -80,3 +80,106 @@ def login(request):
             return render(request, 'blog/login.html', {'error': errormsg})
     # 在请求方式不是POST时，也就是GET时，通过render()打开页面
     return render(request, 'blog/login.html')
+
+
+def logout(request):
+    # 调用认证模块，执行logout()函数，这样会把用户相关的cookie、session清空
+    auth.logout(request)
+    # 重定向到首页
+    return redirect("/")
+
+
+# 视图采用通用视图，这里采用的是列表形式，要继承ListView，因此要导入相关模块
+from django.views.generic import ListView
+
+
+# 视图indexview继承于ListView通用视图类
+class indexview(ListView):
+    # 指定数据模型（数据库表），默认取全部记录
+    model = models.Blog
+    # 指定模块文件的地址与名字
+    template_name = 'blog/index.html'
+    """
+    以下语句指定传递给模板文件的模板变量名
+    这个模板变量blog_list保存着model指定的数据模型的记录集合
+    也就是model与context_object_name这个属性有关联
+    """
+    context_object_name = 'blog_list'
+    # 设置每页显示的记录数
+    paginate_by = 10
+
+    # 重写get_context_data()方法
+    def get_context_data(self, **kwargs):
+        """
+        在普通视图函数中将模板变量传递给模板
+        通过给 render() 函数向模板文件传递一个字典来实现
+        例如 render(request, 'blog/index.html', context={'Blog_list':blog_list})
+        或者 render(request, 'blog/index.html', {'Blog_list':blog_list})
+        在通用类视图中，如果不是获取数据模型的全部记录
+        需要重写 get_context_data()方法，获得条件过滤后的记录
+        注意本视图的代码并没有对数据库表记录进行条件过滤
+        这里的目的是利用父类的get_context_data()方法返回值中有关分页的数值
+        利用这些分页相关数值进行自定义分页代码的编写
+        在复写该方法时，还可以增加一些自定义的模板变量
+        """
+        # 　首先获得父类生成的包含模板变量的字典
+        context = super().get_context_data(**kwargs)
+        """
+        父类(List View类)生成的字典(context)中已有paginator、page_obj、is_paginated 这3个键值对
+        paginator 是 Paginator 的一个实例
+        page_obj 是 Page 的一个实例
+        is_ paginated 是一个布尔变量，用于指示是否已分页
+        例如，如果规定每页10条记录，而本身只有5条记录
+        其实就用不着分页，此时 is_paginated=False
+        由于 context 是一个字典，所以调用get()方法从中取出某个键对应的值
+        """
+        paginator = context.get('paginator')
+        pageobj = context.get('page_obj')
+        is_paginated = context.get('is_paginated')
+        # 设置每页中分页导航条页码标签的个数
+        show_pagenumber = 7
+        # 调用自定义 get_page_data()方法获得显示分页导航条所需要的数据
+        page_data = self.get_page_data(is_paginated, paginator, pageobj, show_pagenumber)
+        # 将page_data变量更新到 context 中，注意 page_data 是一个字典
+        context.update(page_data)
+        # 传递标识值，如果这个值为firsttab，表示显示“首页”链接被选中
+        context['tabname'] = 'firsttab'
+        # 将更新后的 context 返回，以便 List View 使用这个字典中的模板变量去渲染模板
+        # 注意此时 context 字典中已有了显示分页导航条所需的数据
+        return context
+
+    # 自定义 get_page_data()方法，返回当前页的前面页码标签的个数以及后面页码标签的个数
+    def get_page_data(self, is_pageinated, paginator, pageobj, show_pagenumber):
+        # 如果没有分页，返回空字典
+        if not is_pageinated:
+            return {}
+        """
+        分页数据由3部分组成
+        前面用left存页码，后面用right存页码，中间部分就是当前页pageobj.number
+        lefe，right都初始化为空列表
+        """
+        left = []
+        right = []
+        # 当前页面数值的获取，得当前请求的页码号
+        cur_page = pageobj.number
+        # 取出分页中最后的页码
+        total = paginator.num_pages
+        # 得到显示页数的一半，“//”可以取得两数相除的商的整数部分
+        # show_pagenumber是页码标签的个数
+        half = show_pagenumber // 2
+        # 取出当前页面前面(letf)显示页标签个数，注意range()
+        # 如range(start, stop)用法，计数从 start 开始，计数到 stop 结束，但不包括 stop
+        for i in range(cur_page - half, cur_page):
+            # 数值大于等于1时，才取数值放到left列表中
+            if i >= 1:
+                left.append(i)
+        # 取出当前页面后面(right)显示页标签个数，再次提示注意range()用法
+        for i in range(cur_page + 1, cur_page + half + 1):
+            # 数值小于等于页数的最大页数时，才取数值放到right列表中
+            if i <= total:
+                right.append(i)
+                page_data = {
+                    'left': left,
+                    'right': right,
+                }
+                return page_data

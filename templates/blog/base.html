@@ -1,7 +1,7 @@
 <!--导入静态文件服务模块　// -->
 {% load static %}
 <!--导入自定义模板标签//-->
-{% load custom_tags %}
+{#{% load custom_tags %}#}
 <html>
 <head>
     <title>blog样例 </title>
@@ -35,7 +35,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'blog:index' %}" style="color:red;font-weight:700;">Blog系统简例</a>
+            <a class="navbar-brand" href="#" style="color:red;font-weight:700;">Blog系统简例</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-left" id="bs-example-navbar-collapse-1">
@@ -43,8 +43,8 @@
                 <!-- {% if tabname == "firsttab" %}
                     … {% endif %}这个判断语句中，tabname是视图函数传入的变量，相关视图函数请查看本章后面的有关介绍，主要标识用户单击了“首页”“我的”中的哪一个链接 //-->
                 <li {% if tabname == "firsttab" %} class='active' {% endif %}>
-                    <a href="{% url 'blog:index' %}" style="color:red;">首页</a></li>
-                <!-- 以下是模板标签的判断标签，判断用户是否已登录，以决定“我的”链接是否显示，注意不能用{% if request.user %}判断用户登录，因为无用户登录时，request.user 的值为Anonymous User，但request.user.username无值（None），只有用户登录了，request.user.username才有值 -->
+                    <a href="#" style="color:red;">首页</a></li>
+{#                <!-- 以下是模板标签的判断标签，判断用户是否已登录，以决定“我的”链接是否显示，注意不能用{% if request.user %}判断用户登录，因为无用户登录时，request.user 的值为Anonymous User，但request.user.username无值（None），只有用户登录了，request.user.username才有值 -->#}
                 <!-- 判断语句if的开始-->
                 {% if request.user.username %}
                     <li {% if tabname == "mytab" %} class='active' {% endif %}>
@@ -52,7 +52,7 @@
                 {% endif %}
                 <!-- 判断语句if的结束-->
                 <!-- 通过一个<form>表单设置一个搜索字段，请注意设置请求方式是get-->
-                <form class="navbar-form navbar-left" method="get" action="{% url 'haystack_search' %}">
+                <form class="navbar-form navbar-left" method="get" action="#">
                     <div class="form-group">
                         <input type="text" class="form-control" name="q" placeholder="搜索" required>
                     </div>
@@ -100,10 +100,10 @@
                         <div class="panel-heading">最新文章</div>
                         <div class="panel-body">
                             <!-- 调用自定义标签文件custom_tags中定义的get_new_blogs()函数，返回最新发表的文章-->
-                            <!-- 模板标签get_new_blogs在模板文件中的工作方式：输入{% get_new_blogs as new_blog_list %}，模板就得到一个最新文章列表，并通过 as 语句保存到 new_blog_list 模板变量里，后面的语句就可以循环从new_blog_list获取每篇文章-->
-                            {% get_new_blogs as new_blog_list %}
+{#                            <!-- 模板标签get_new_blogs在模板文件中的工作方式：输入{% get_new_blogs as new_blog_list %}，模板就得到一个最新文章列表，并通过 as 语句保存到 new_blog_list 模板变量里，后面的语句就可以循环从new_blog_list获取每篇文章-->#}
+{#                            {% get_new_blogs as new_blog_list %}#}
                             <ul>
-                                <!-- 通过{% for %}{% endfor%}模板标签循环new_blog_list变量，取得最新文章列表-->
+{#                                <!-- 通过{% for %}{% endfor%}模板标签循环new_blog_list变量，取得最新文章列表-->#}
                                 {% for blog in new_blog_list %}
                                     <li>
                                         <!-- Blog数据模型的实例对象blog调用Blog数据模型中定义的方法get_absolute_url()，该方法返回URL-->
@@ -119,7 +119,7 @@
                         <div class="panel-heading">分类</div>
                         <div class="panel-body">
                             <!-- 调用自定义标签文件custom_tags中定义的get_categories()函数，显示每个类中的文章篇数-->
-                            {% get_categories as category_list %}
+{#                            {% get_categories as category_list %}#}
                             <ul>
                                 {% for category in category_list %}
                                     <li>
@@ -139,7 +139,7 @@
                         <div class="panel-body">
                             <div class="tag-list">
                                 <!--调用自定义标签文件custom_tags中定义的get_tags()函数，显示每个标签的名字和文件数量-->
-                                {% get_tags as tag_list %}
+{#                                {% get_tags as tag_list %}#}
                                 <ul>
                                     {% for tag in tag_list %}
                                         <!-- 显示每个标签的名字和文件数量-->
@@ -157,7 +157,7 @@
                         <div class="panel-heading">归档</div>
                         <div class="panel-body">
                             <!-- 调用自定义标签文件custom_tags中定义的archives()函数，倒序显示有文章发表的年、月-->
-                            {% archives as date_list %}
+{#                            {% archives as date_list %}#}
                             <ul>
                                 {% for date in date_list %}
                                     <li>
