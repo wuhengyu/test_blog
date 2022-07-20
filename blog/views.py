@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 # 导入/blog/models.py中的数据模型
 from . import models
 # 导入Django的认证模块，因为代码中要模拟用户登录
@@ -17,7 +17,6 @@ def test_ckeditor_front(request):
     return render(request, 'blog/test_ckeditor_front.html', {'blog': blog})
 
 
-from django.shortcuts import redirect
 # 导入forms模块（文件），文件中定义了reg_form()
 from . import forms
 
