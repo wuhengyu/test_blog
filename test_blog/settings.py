@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'ckeditor',
     # 注册富文本编辑器上传功能
     'ckeditor_uploader',
+    # 注册comments应用程序
+    'comments1',
 ]
 
 MIDDLEWARE = [
@@ -80,8 +82,8 @@ WSGI_APPLICATION = 'test_blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        # 'HOST': '192.168.195.131',
-        'HOST': '127.0.0.1',
+        'HOST': '192.168.195.133',
+        # 'HOST': '127.0.0.1',
         'PORT': '3306',
         'NAME': 'test_blog',
         'USER': 'root',

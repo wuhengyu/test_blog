@@ -9,6 +9,7 @@ from django.urls import path, re_path
 from .views import *
 
 app_name = 'blog'
+
 urlpatterns = [
     # 加入一个URL配置项
     path('test_ckeditor_front/', test_ckeditor_front),
@@ -18,5 +19,7 @@ urlpatterns = [
     path('registe/', registe, name='registe'),
     # 注销的URL配置项
     path('logout/', logout, name='logout'),
-    path('indexview/', indexview.as_view(), name='indexview'),
+    path('indexview/', indexview.as_view(), name='index'),
+
+    re_path(r'^category/(?P<pk>[0-9]+)/', categoryview.as_view(), name='category'),
 ]

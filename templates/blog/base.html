@@ -1,8 +1,8 @@
 <!--导入静态文件服务模块　// -->
 {% load static %}
 <!--导入自定义模板标签//-->
-{#{% load custom_tags %}#}
-<html>
+{% load custom_tags %}
+<html lang="en">
 <head>
     <title>blog样例 </title>
     <!-- meta -->
@@ -35,7 +35,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#" style="color:red;font-weight:700;">Blog系统简例</a>
+            <a class="navbar-brand" href="{% url 'blog:index' %}" style="color:red;font-weight:700;">Blog系统简例</a>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-left" id="bs-example-navbar-collapse-1">
@@ -43,8 +43,8 @@
                 <!-- {% if tabname == "firsttab" %}
                     … {% endif %}这个判断语句中，tabname是视图函数传入的变量，相关视图函数请查看本章后面的有关介绍，主要标识用户单击了“首页”“我的”中的哪一个链接 //-->
                 <li {% if tabname == "firsttab" %} class='active' {% endif %}>
-                    <a href="#" style="color:red;">首页</a></li>
-{#                <!-- 以下是模板标签的判断标签，判断用户是否已登录，以决定“我的”链接是否显示，注意不能用{% if request.user %}判断用户登录，因为无用户登录时，request.user 的值为Anonymous User，但request.user.username无值（None），只有用户登录了，request.user.username才有值 -->#}
+                    <a href="{% url 'blog:index' %}" style="color:red;">首页</a></li>
+                {#                <!-- 以下是模板标签的判断标签，判断用户是否已登录，以决定“我的”链接是否显示，注意不能用{% if request.user %}判断用户登录，因为无用户登录时，request.user 的值为Anonymous User，但request.user.username无值（None），只有用户登录了，request.user.username才有值 -->#}
                 <!-- 判断语句if的开始-->
                 {% if request.user.username %}
                     <li {% if tabname == "mytab" %} class='active' {% endif %}>
@@ -142,7 +142,7 @@
 {#                                {% get_tags as tag_list %}#}
                                 <ul>
                                     {% for tag in tag_list %}
-                                        <!-- 显示每个标签的名字和文件数量-->
+                                        <!-- 显示每个标签的名字和文件数量-->houye
                                         <li>
                                             <a href="{% url 'blog:tag' tag.pk %}">{{ tag.name }}({{ tag.num_blogs }})</a>
                                         </li>

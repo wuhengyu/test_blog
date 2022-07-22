@@ -183,3 +183,98 @@ class indexview(ListView):
                     'right': right,
                 }
                 return page_data
+
+
+# 导入Detail View类
+from django.views.generic import DetailView
+
+
+# 视图继承于Detail View通用视图类
+class blogdetailview(DetailView):
+    # 指定数据模型，从中取出一条记录
+    model = models.Blog
+    # 指定模板文件
+    template_name = 'blog/detail.html'
+    # 指定传给模板文件的模板变量名
+    context_object_name = 'blog'
+    # pk_url_kwarg指定取得一条记录的主键值，pk是指配置项中的URL表达式中的参数名
+    # 可以理解为获取主键值等于URL表达式中参数pk值的数据记录
+    pk_url_kwarg = 'pk'
+
+    # 重写父类get_object()方法，常用于返回定制的数据记录
+    def get_object(self, queryset=None):
+        blog = super(blogdetailview, self).get_object(queryset=None)
+        blog.increase_views()
+        return blog
+
+    # 重写get_context_data()方法，常用于增加数据模板变量
+    def get_context_data(self, **kwargs):
+        return 0
+
+
+# 视图继承于List View类
+class categoryview(ListView):
+    # 设置数据模型，指定数据取自Blog，默认取全部记录
+    model = models.Blog
+    # 指定模板文件
+    template_name = 'blog/index.html'
+    # 指定传递给模板文件的参数名
+    context_object_name = 'blog_list'
+
+    def get_queryset(self):
+        cate = get_object_or_404(models.Category, pk=self.kwargs.get('pk'))
+        # 继承父类的get_queryset()方法，并通过filter()函数对记录进行过滤
+        # 通过order_by()进行排序
+        return super(categoryview, self).get_queryset().filter(category=cate).order_by('-created_time')
+
+
+# 视图继承于List View类
+class tagview(ListView):
+    model = models.Blog
+    template_name = 'blog/index.html'
+    context_object_name = 'blog_list'
+
+    def get_queryset(self):
+        tag = get_object_or_404(models.Tag, pk=self.kwargs.get('pk'))
+        return super(tagview, self).get_queryset().filter(tags=tag).order_by('created_time')
+
+
+from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from . import models
+# 导入Comment Form表单
+from comments1.forms import CommentForm
+from django.views.generic import ListView, DetailView
+
+
+class blogdetailview(DetailView):
+    # 指定数据模型
+    model = models.Blog
+    # 指定模板文件
+    template_name = 'blog/detail.html'
+    # 指定模板变量名
+    context_object_name = 'blog'
+    # 指定主键，'pk'为配置文件中的URL参数名
+    pk_url_kwarg = 'pk'
+
+    # 重写父类的get_object()方法，这个方法可以返回主键等于URL参数值的记录对象
+    # 可以进一步对这个记录对象进行操作，如调用该对象的方法
+    def get_object(self, queryset=None):
+        # 调用父类get_object()取得一条记录，主键等于URL参数pk的值
+        blog = super(blogdetailview, self).get_object(queryset=None)
+        # 调用这条记录对象的increase_views()方法，把views字段值加1
+        blog.increase_views()
+        return blog
+
+    def get_context_data(self, **kwargs):
+        # 通过调用父类方法得到一个包含模板变量的字典
+        context = super(blogdetailview, self).get_context_data(**kwargs)
+        # 初始化Commetn Form表单
+        form = CommentForm()
+        # 取得本条记录对象的所有评论
+        comment_list = self.object.comment_set.all()
+        # 在模板变量字典中加入新的字典项
+        context.update({
+            'form': form,
+            'comment_list': comment_list
+        })
+        return context
