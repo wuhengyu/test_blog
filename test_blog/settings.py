@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     # 注册富文本编辑器上传功能
     'ckeditor_uploader',
     # 注册comments应用程序
-    'comments1',
+    'comments',
 ]
 
 MIDDLEWARE = [

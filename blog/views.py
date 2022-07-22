@@ -242,7 +242,7 @@ class tagview(ListView):
 from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
 from . import models
 # 导入Comment Form表单
-from comments1.forms import CommentForm
+from comments.forms import CommentForm
 from django.views.generic import ListView, DetailView
 
 
