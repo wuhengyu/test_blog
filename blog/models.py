@@ -134,6 +134,7 @@ class Blog(models.Model):
         verbose_name = '文档管理表'
         verbose_name_plural = '文档管理表'
 
+
 # 数据表loguser
 # 代码段3
 from django.db import models
