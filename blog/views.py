@@ -239,7 +239,7 @@ class tagview(ListView):
         return super(tagview, self).get_queryset().filter(tags=tag).order_by('created_time')
 
 
-from django.shortcuts import render, redirect, HttpResponse, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from . import models
 # 导入Comment Form表单
 from comments.forms import CommentForm

@@ -22,7 +22,7 @@
                     </h1>
                     <div class="entry-meta-detail">
 <span class="blog-category">
-<a href="{% url 'blog:category' result.object. category.pk %}">
+<a href="{% url 'blog:category' result.object.category.pk %}">
 {{ result.object.category.name }}</a></span>
                         <span class="blog-date"><a href="#">
 <time class="entry-date" datetime="{{ result.object.created_time }}">
@@ -30,7 +30,7 @@
                         <span class="blog-author"><a href="#">{{ result.object.author }}</a></span>
                         <span class="comments-link">
 <a href="{{ result.object.get_absolute_url }}#comment-area">
-{{ result.object.comment_set.count }} 评论</a></span>
+评论</a></span>
                         <span class="views-count"><a
                                 href="{{ result.object.get_absolute_url }}">{{ result.object.views }} 阅读</a></span>
                     </div>
