@@ -84,7 +84,7 @@ WSGI_APPLICATION = 'test_blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '192.168.195.134',
+        'HOST': '192.168.195.135',
         # 'HOST': '127.0.0.1',
         'PORT': '3306',
         'NAME': 'test_blog',
@@ -162,7 +162,7 @@ CKEDITOR_CONFIGS = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         # 指定了Django Haystack要使用的搜索引擎，whoosh_backend_cn就是我们修改的文件
-        'ENGINE': 'blog.whoosh_backend_cn.Whoosh Engine',
+        'ENGINE': 'blog.whoosh_backends_cn.WhooshEngine',
         # 指定索引文件存放的位置
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
@@ -170,4 +170,4 @@ HAYSTACK_CONNECTIONS = {
 # 指定搜索结果分页方式为每页6条记录
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 6
 # 指定实时更新索引，当有数据改变时，自动更新索引
-HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.Realtime Signal Processor'
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'

@@ -52,7 +52,7 @@
                 {% endif %}
                 <!-- 判断语句if的结束-->
                 <!-- 通过一个<form>表单设置一个搜索字段，请注意设置请求方式是get-->
-                <form class="navbar-form navbar-left" method="get" action="#">
+                <form class="navbar-form navbar-left" method="get" action="{% url 'haystack_search' %}">
                     <div class="form-group">
                         <input type="text" class="form-control" name="q" placeholder="搜索" required>
                     </div>
