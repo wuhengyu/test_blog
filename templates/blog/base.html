@@ -48,7 +48,7 @@
                 <!-- 判断语句if的开始-->
                 {% if request.user.username %}
                     <li {% if tabname == "mytab" %} class='active' {% endif %}>
-                        <a href="{% url 'blog:myindex' request.user.id %}" data-hover="我的">我的</a></li>
+                        <a href="#" data-hover="我的">我的</a></li>
                 {% endif %}
                 <!-- 判断语句if的结束-->
                 <!-- 通过一个<form>表单设置一个搜索字段，请注意设置请求方式是get-->
@@ -69,7 +69,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false"> 个人中心<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'blog:myindex' request.user.id %}">我的文章</a></li>
+                        <li><a href="#">我的文章</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{% url 'blog:logout' %}">注销</a></li>
                     </ul>

@@ -22,4 +22,5 @@ urlpatterns = [
     path('indexview/', indexview.as_view(), name='index'),
 
     re_path(r'^category/(?P<pk>[0-9]+)/', categoryview.as_view(), name='category'),
+
 ]

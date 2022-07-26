@@ -23,5 +23,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('blog/', include('blog.urls', namespace='blog')),
     path('comments/', include('comments.urls')),
+    # 导入Haystack配置项
+    path('search/', include('haystack.urls')),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
