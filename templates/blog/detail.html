@@ -34,27 +34,27 @@
         </div>
     </div>
 {% endif %}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h5>评论列表，共 <span>{{ comment_list|length }}</span> 条评论</h5>
-    </div>
-    <div class="panel-body">
-        <ul class="comment-list list-unstyled">
-            <!--　 通过for循环取出每一条记录-->
-            {% for comment in comment_list %}
-                <li>
-                    <span style="color: #777;font-size: 14px;">{{ comment.name }}&nbsp;·&nbsp;</span>
-                    <time style="color: #777;font-size: 14px;">{{ comment.created_time }}</time>
-                    <div style="padding-top: 5px;font-size: 16px;">
-                        {{ comment.text }}
-                    </div>
-                </li>
-            {% empty %}
-                暂无评论
-            {% endfor %}
-        </ul>
-    </div>
-</div>
+{#<div class="panel panel-default">#}
+{#    <div class="panel-heading">#}
+{#        <h5>评论列表，共 <span>{{ comment_list|length }}</span> 条评论</h5>#}
+{#    </div>#}
+{#    <div class="panel-body">#}
+{#        <ul class="comment-list list-unstyled">#}
+{#            <!--　 通过for循环取出每一条记录-->#}
+{#            {% for comment in comment_list %}#}
+{#                <li>#}
+{#                    <span style="color: #777;font-size: 14px;">{{ comment.name }}&nbsp;·&nbsp;</span>#}
+{#                    <time style="color: #777;font-size: 14px;">{{ comment.created_time }}</time>#}
+{#                    <div style="padding-top: 5px;font-size: 16px;">#}
+{#                        {{ comment.text }}#}
+{#                    </div>#}
+{#                </li>#}
+{#            {% empty %}#}
+{#                暂无评论#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    </div>#}
+{#</div>#}
 </section>
 </body>
 </html>
