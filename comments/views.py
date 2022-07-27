@@ -24,6 +24,7 @@ def blog_comment(request, blog_pk):
             # 用户登录后，request.user保存用户的nikename、email等值
             comment.name = request.user.nikename
             comment.email = request.user.email
+            comment.head_img = request.user.head_img
             # 通过外键关系将评论和被评论的文章关联起来
             comment.blog = blog
             # 真正保存到数据库表中

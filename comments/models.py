@@ -5,6 +5,7 @@ from django.db import models
 
 class Comment(models.Model):
     name = models.CharField(max_length=32)
+    head_img = models.ImageField(upload_to=None)
     email = models.EmailField(max_length=60)
     # 评论可能有较长的文本，因此用TextField类型
     text = models.TextField()
